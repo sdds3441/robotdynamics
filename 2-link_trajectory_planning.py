@@ -63,6 +63,7 @@ for i in range(Route_point):
     alpha = np.arctan2(l2 * sin_theta2, l1 + l2 * cos_theta2)
     beta = np.arctan2(y, x)
     theta1 = beta - alpha
+    print(theta1)
 
     theta1_array.append(theta1)
     theta2_array.append(theta2)
@@ -75,8 +76,6 @@ for i in range(Route_point):
     y_l2_end.append(l1 * np.sin(theta1) + l2 * np.sin(theta1 + theta2))
     x_end_effector.append(l1 * np.cos(theta1) + l2 * np.cos(theta1 + theta2))
     y_end_effector.append(l1 * np.sin(theta1) + l2 * np.sin(theta1 + theta2))
-
-    print(x, y)
 
 # 애니메이션에서 로봇 팔의 위치를 업데이트하는 함수 정의
 
