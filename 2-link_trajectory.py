@@ -26,7 +26,6 @@ plt.plot(theta_list)
 plt.title("Position")
 plt.ylabel("Degree")
 plt.xticks(visible=False)
-
 plt.subplot(3,1,2,sharex=ax1)
 plt.plot(theta_d_list)
 plt.title("Velocity")
