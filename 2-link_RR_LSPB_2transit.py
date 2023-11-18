@@ -67,13 +67,18 @@ for i in np.arange(0, t, 0.001):
         theta_2d_list.append(theta_2d)
 
     if t2 - tb1 < i <= t2:
+
+        theta, theta_d, theta_2d = theta3(transit, theta1_2d, i, t=t2)
         a_theta, a_theta_d, a_theta_2d = theta3(transit, theta1_2d, i, t=t2)
-        if tb2 < i:
-            b_theta, b_theta_d, b_theta_2d = theta1(transit2, theta2_2d, i)
-        # if b_theta < a_theta:
-        theta, theta_d, theta_2d = a_theta, a_theta_d, a_theta_2d
-        # else:
-        #    theta, theta_d, theta_2d = b_theta, b_theta_d, b_theta_2d
+        b_theta, b_theta_d, b_theta_2d = theta1(transit2, theta2_2d, i)
+        c_theta, c_theta_d, c_theta_2d = theta2(transit2, theta2_2d, i, tb2, 2)
+        if tb2 > i:
+            if b_theta_d < a_theta_d:
+                theta, theta_d, theta_2d = a_theta, a_theta_d, a_theta_2d
+            else:
+                theta, theta_d, theta_2d = a_theta, b_theta_d, b_theta_2d
+        elif i > tb2:
+            theta, theta_d, theta_2d = a_theta, c_theta_d, c_theta_2d
         theta_list.append(theta)
         theta_d_list.append(theta_d)
         theta_2d_list.append(theta_2d)
@@ -90,12 +95,13 @@ for i in np.arange(0, t, 0.001):
         theta_d_list.append(theta_d)
         theta_2d_list.append(theta_2d)
 
-Time = int(float(input("Input Time:"))*1000)
+Time = int(float(input("Input Time:")) * 1000)
 Torque = str(round(theta_2d_list[Time] ** 2, 3)) + "ml^2+" + str(round(math.sin(theta_list[Time]), 3)) + "mgl"
 ax1 = plt.subplot(3, 1, 1)
 plt.plot(theta_list)
 plt.title("Position")
-plt.text(3, 50, 'Torque='+str(round(theta_2d_list[Time] ** 2, 3)) + r"m$l^2$+" + str(round(math.sin(theta_list[Time]), 3)) + "mgl")
+plt.text(3, 50, 'Torque=' + str(round(theta_2d_list[Time] ** 2, 3)) + r"m$l^2$+" + str(
+    round(math.sin(theta_list[Time]), 3)) + "mgl")
 plt.xticks(visible=False)
 
 plt.subplot(3, 1, 2, sharex=ax1)

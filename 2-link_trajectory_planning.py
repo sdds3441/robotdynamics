@@ -9,7 +9,6 @@ def update(frame, Route, link_l1, link_l2):
 
     Route.set_data([start_x, x_l2_end[frame]], [start_y, y_l2_end[frame]])
 
-    # 로봇 팔의 링크 위치를 업데이트
     link_l1_x = [0, x_l1_end[frame]]
     link_l1_y = [0, y_l1_end[frame]]
     link_l1.set_data(link_l1_x, link_l1_y)
@@ -51,8 +50,6 @@ for i in range(Route_point):
     s1 = (y_trajectory[i] * (l1 + l2 * c2) - x_trajectory[i] * l2 * s2)
 
     theta1 = np.arctan2(s1, c1)
-    # theta1 = np.arctan2(y_trajectory[i], x_trajectory[i]) - np.arctan2(l2*s2, l1 + l2 * c2)
-
     theta1_list.append(theta1)
     theta2_list.append(theta2)
 
@@ -68,7 +65,6 @@ Route, = ax.plot([], [], 'k')
 link_l1, = ax.plot([], 'b', lw=10)
 link_l2, = ax.plot([], 'r', lw=10)
 
-# 애니메이션 생성
 ani = animation.FuncAnimation(figure, update, frames=range(Route_point), fargs=(Route, link_l1, link_l2))
 plt.title("2-link trajectory planning")
 plt.text(8.25, 8 + 1 / 2, 'x')
