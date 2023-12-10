@@ -11,3 +11,4 @@ cv2.line(img, (128, round(256 - space)), (128, round(256 - space)), (255, 0, 0),
 cv2.imshow('img', img)
 cv2.waitKey()
 cv2.imwrite('dataset/triangle.png', img)
+

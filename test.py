@@ -7,7 +7,7 @@ a2 = 8
 a3 = 6
 
 # Desired Position of End effector
-px = 15
+px = 20
 py = -0
 
 phi = 30
