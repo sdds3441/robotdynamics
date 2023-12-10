@@ -1,44 +1,47 @@
-import math
+from numpy import *
 
-import numpy as np
-from scipy import signal
-import matplotlib.pyplot as plt
-from scipy.signal import cont2discrete, lti, dstep
+l1 = 10.0
+l2 = 8.0
+l3 = 6.0
 
-from Pure import ax, fig
+I1 = 1
+I2 = 1
+I3 = 1
 
-T = 10 ** -4
-s = 0  # sec
-K = 62.89  # 'motor_gain'
-z = math.exp(s * T)
-tau = 16.05 * (10 ** -3)
-a1 = -(1 + math.exp(-T / tau))
-a2 = math.exp(-T / tau)
-b1 = K * (T - tau + tau * math.exp(-T / tau))
-b2 = K * (tau - (T + tau) * math.exp(-T / tau))
-num_s = [62.89]
-den_s = [0.001605, 1]
-sys_s = signal.TransferFunction(num_s, den_s)
-t, y = signal.step(sys_s)
+m1 = 1.0
+m2 = 1.0
+m3 = 1.0
 
-num_z = [b1, b2]
-den_z = [1, a1, a2]
+theta1 = 30.0
+theta1 = deg2rad(theta1)
+theta2 = 30.0
+theta2 = deg2rad(theta2)
+theta3 = 30.0
+theta3 = deg2rad(theta3)
 
-A = np.array([[0, 1], [-10., -3]])
-B = np.array([[0], [10.]])
-C = np.array([[1., 0]])
-D = np.array([[0.]])
-l_system = lti(A, B, C, D)
+g = 9.81
 
-t, x = l_system.step(T=np.linspace(0, 5, 100))
-fig, ax = plt.subplots()
-ax.plot(t, x, label='Continuous', linewidth=3)
-dt = 0.1
-for method in ['zoh']:
-    d_system = cont2discrete((A, B, C, D), dt, method=method)
-    s, x_d = dstep(d_system)
-    ax.step(s, np.squeeze(x_d), label=method, where='post')
-ax.axis([t[0], t[-1], x[0], 1.4])
-ax.legend(loc='best')
-fig.tight_layout()
-plt.show()
+g1 = m3 * g * ((l1 * cos(theta1)) + 0.5 * l3 * cos(theta1 + theta2 + theta3) + l2 * cos(theta1 + theta2)) + m2 * g * (
+        l1 * cos(theta1) + 0.5 * l2 * cos(theta1 + theta2)) + 0.5 * m1 * g * l1 * cos(theta1)
+
+g2 = m3 * g * (0.5 * l3 * cos(theta1 + theta2 + theta3) + l2 * cos(theta1 + theta2)) + 0.5 * m2 * g * l2 * cos(
+    theta1 + theta2)
+
+g3 = 0.5 * m3 * g * l3 * cos(theta1 + theta2 + theta3)
+
+M11 = l1 ** 2 * (0.25 * m1 + m2 + m3) + l2 ** 2 * (0.25 * m2 + m3) + 0.25 * l3 ** 2 * m3 + l1 * l2 * cos(theta2) * (
+            m2 + 2 * m3) + l2 * l3 * m3 * cos(theta3) + 0.5 * l1 * l3 * m3 * cos(theta2 + theta3) + I1 + I2 + I3
+M12 = l2 ** 2 * (0.25 * m2 + m3) + 0.25 * l3 ** 2 * m3 + l1 * l2 * cos(theta2) * (m3 + 0.5 * m2) + l2 * l3 * m3 * cos(
+    theta3) + 0.5 * l1 * l3 * m3 * cos(theta2 + theta3) + I2 + I3
+M13 = 0.25 * l3 ** 2 * m3 + 0.5 * l2 * l3 * m3 * cos(theta3) + 0.5 * l1 * l3 * m3 * cos(theta2 + theta3) + I3
+
+M21 = l2 ** 2 * (0.25 * m2 + m3) + 0.25 * l3 ** 2 * m3 + l1 * l2 * cos(theta2) * (m3 + 0.5 * m2) + l2 * l3 * m3 * cos(
+    theta3) + 0.5 * l1 * l3 * m3 * cos(theta2 + theta3) + I2 + I3
+M22 = l2 ** 2 * (0.25 * m2 + m3) + 0.25 * l3 ** 2 * m3 + l2 * l3 * m3 * cos(theta3) + I2 + I3
+M23 = 0.25 * l3 ** 2 * m3 + 0.5 * l2 * l3 * m3 * cos(theta3) + I3
+
+M31 = 0.25 * l3 ** 2 * m3 + 0.5 * l2 * l3 * m3 * cos(theta3) + 0.5 * l1 * l3 * m3 * cos(theta2 + theta3) + I3
+M32 = 0.25 * l3 ** 2 * m3 + 0.5 * l2 * l3 * m3 * cos(theta3) + I3
+M33 = 0.25 * l3 ** 2 * m3 + I3
+
+print(M11, M12, M13)

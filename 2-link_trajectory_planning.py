@@ -65,7 +65,7 @@ Route, = ax.plot([], [], 'k')
 link_l1, = ax.plot([], 'b', lw=10)
 link_l2, = ax.plot([], 'r', lw=10)
 
-ani = animation.FuncAnimation(figure, update, frames=range(Route_point), fargs=(Route, link_l1, link_l2))
+ani = animation.FuncAnimation(figure, update, fargs=(Route, link_l1, link_l2))
 plt.title("2-link trajectory planning")
 plt.text(8.25, 8 + 1 / 2, 'x')
 plt.text(9.25, 8 + 1 / 2, 'y')
