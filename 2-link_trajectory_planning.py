@@ -32,6 +32,7 @@ end_x = 4.5
 end_y = 6.5
 
 x_trajectory = np.linspace(start_x, end_x, Route_point)
+print(x_trajectory)
 y_trajectory = np.linspace(start_y, end_y, Route_point)
 
 theta1_list = []

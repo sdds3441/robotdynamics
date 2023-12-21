@@ -201,11 +201,21 @@ def torque_jacobian(theta_1, theta_2, theta_3):
 
     return torque
 
-img=cv2.imread('dataset/triangle.png',cv2.IMREAD_COLOR)
+img = zeros(shape=(256, 256, 3), dtype=uint8)
+space = (256 - 100 * sqrt(3)) / 2
+triangle = array([[28, space], [228, space], [128, 256 - space]], dtype=int32)
+
+cv2.fillConvexPoly(img, triangle, color=(0, 0, 255))
+
+cv2.line(img, (128, round(256 - space)), (128, round(256 - space)), (255, 0, 0), 10)
+cv2.imshow('img', img)
+cv2.waitKey()
+cv2.imwrite('triangle.png', img)
+
+img = cv2.imread('triangle.png', cv2.IMREAD_COLOR)
 (h, w) = img.shape[:2]
 (cX, cY) = (w // 2, h // 2)
-print(cX,cY)
-
+print(cX, cY)
 
 M1 = cv2.getRotationMatrix2D((cX, cY), 90, 1.0)
 M2 = cv2.getRotationMatrix2D((138, 108), 135, 1.0)
@@ -213,14 +223,14 @@ M3 = cv2.getRotationMatrix2D((cX, cY), 180, 1.0)
 rotated_90 = cv2.warpAffine(img, M1, (w, h))
 rotated_135 = cv2.warpAffine(img, M2, (w, h))
 rotated_180 = cv2.warpAffine(img, M3, (w, h))
-cv2.imshow('img',img)
-cv2.imshow('img_90',rotated_90)
-cv2.imshow('img_135',rotated_135)
-cv2.imshow('img_180',rotated_180)
+cv2.imshow('img', img)
+cv2.imshow('img_90', rotated_90)
+cv2.imshow('img_135', rotated_135)
+cv2.imshow('img_180', rotated_180)
 cv2.waitKey()
-cv2.imwrite('dataset/img_90.png', rotated_90)
-cv2.imwrite('dataset/img_135.png', rotated_135)
-cv2.imwrite('dataset/img_180.png', rotated_180)
+cv2.imwrite('img_90.png', rotated_90)
+cv2.imwrite('img_135.png', rotated_135)
+cv2.imwrite('img_180.png', rotated_180)
 
 cv2.destroyAllWindows()
 
@@ -259,6 +269,27 @@ theta1_torque_list = []
 theta2_torque_list = []
 theta3_torque_list = []
 
+theta1_list2 = []
+theta2_list2 = []
+theta3_list2 = []
+theta1_torque_list2 = []
+theta2_torque_list2 = []
+theta3_torque_list2 = []
+
+theta1_list3 = []
+theta2_list3 = []
+theta3_list3 = []
+theta1_torque_list3 = []
+theta2_torque_list3 = []
+theta3_torque_list3 = []
+
+theta1_list4 = []
+theta2_list4 = []
+theta3_list4 = []
+theta1_torque_list4 = []
+theta2_torque_list4 = []
+theta3_torque_list4 = []
+
 first_x = 15
 first_y = -10
 
@@ -280,23 +311,66 @@ x_l1_end, x_l2_end, x_l3_end, y_l1_end, y_l2_end, y_l3_end, theta1_list, theta2_
     first_x, first_y,
     final_x, final_y)
 
-x_l1_end2, x_l2_end2, x_l3_end2, y_l1_end2, y_l2_end2, y_l3_end2, theta1_list, theta2_list, theta3_list = make_trajectory(
+x_l1_end2, x_l2_end2, x_l3_end2, y_l1_end2, y_l2_end2, y_l3_end2, theta1_list2, theta2_list2, theta3_list2 = make_trajectory(
     first_x, first_y,
     final_x2, final_y)
 
-x_l1_end3, x_l2_end3, x_l3_end3, y_l1_end3, y_l2_end3, y_l3_end3, theta1_list, theta2_list, theta3_list = make_trajectory(
+x_l1_end3, x_l2_end3, x_l3_end3, y_l1_end3, y_l2_end3, y_l3_end3, theta1_list3, theta2_list3, theta3_list3 = make_trajectory(
     first_x, first_y,
     final_x3, final_y)
 
-x_l1_end4, x_l2_end4, x_l3_end4, y_l1_end4, y_l2_end4, y_l3_end4, theta1_list, theta2_list, theta3_list = make_trajectory(
+x_l1_end4, x_l2_end4, x_l3_end4, y_l1_end4, y_l2_end4, y_l3_end4, theta1_list4, theta2_list4, theta3_list4 = make_trajectory(
     first_x, first_y,
     final_x4, final_y)
 
 for i in range(len(theta1_list)):
     Torque = torque_jacobian(theta1_list[i], theta2_list[i], theta3_list[i])
-    theta1_torque_list.append(Torque[0])
-    theta2_torque_list.append(Torque[1])
-    theta3_torque_list.append(Torque[2])
+    theta1_torque_list.append(Torque[0][0])
+    theta2_torque_list.append(Torque[1][0])
+    theta3_torque_list.append(Torque[2][0])
+    Torque = torque_jacobian(theta1_list2[i], theta2_list2[i], theta3_list2[i])
+    theta1_torque_list2.append(Torque[0][0])
+    theta2_torque_list2.append(Torque[1][0])
+    theta3_torque_list2.append(Torque[2][0])
+    Torque = torque_jacobian(theta1_list3[i], theta2_list3[i], theta3_list3[i])
+    theta1_torque_list3.append(Torque[0][0])
+    theta2_torque_list3.append(Torque[1][0])
+    theta3_torque_list3.append(Torque[2][0])
+    Torque = torque_jacobian(theta1_list4[i], theta2_list4[i], theta3_list4[i])
+    theta1_torque_list4.append(Torque[0][0])
+    theta2_torque_list4.append(Torque[1][0])
+    theta3_torque_list4.append(Torque[2][0])
+
+fig,axes=plt.subplots(2,3)
+axes[0,0].plot(theta1_torque_list,range(0,100))
+axes[0,0].plot(theta1_torque_list2,range(0,100))
+axes[0,0].plot(theta1_torque_list3,range(0,100))
+axes[0,0].plot(theta1_torque_list4,range(0,100))
+
+axes[0,1].plot(theta2_torque_list,range(0,100))
+axes[0,1].plot(theta2_torque_list2,range(0,100))
+axes[0,1].plot(theta2_torque_list3,range(0,100))
+axes[0,1].plot(theta2_torque_list4,range(0,100))
+
+axes[0,2].plot(theta3_torque_list,range(0,100))
+axes[0,2].plot(theta3_torque_list2,range(0,100))
+axes[0,2].plot(theta3_torque_list3,range(0,100))
+axes[0,2].plot(theta3_torque_list4,range(0,100))
+
+axes[1,0].plot(theta1_list,range(0,100))
+axes[1,0].plot(theta1_list2,range(0,100))
+axes[1,0].plot(theta1_list3,range(0,100))
+axes[1,0].plot(theta1_list4,range(0,100))
+
+axes[1,1].plot(theta2_list,range(0,100))
+axes[1,1].plot(theta2_list2,range(0,100))
+axes[1,1].plot(theta2_list3,range(0,100))
+axes[1,1].plot(theta2_list4,range(0,100))
+
+axes[1,2].plot(theta3_list,range(0,100))
+axes[1,2].plot(theta3_list2,range(0,100))
+axes[1,2].plot(theta3_list3,range(0,100))
+axes[1,2].plot(theta3_list4,range(0,100))
 
 figure, ax = plt.subplots()
 
